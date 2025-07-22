@@ -1,38 +1,50 @@
 const express = require('express');
+const cors = require('cors');
 require('dotenv').config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5050;
+
+app.use(cors({
+  origin: 'http://localhost:3000',
+  methods: ['GET', 'DELETE'],
+  credentials: true
+}));
 
 app.use(express.json());
 
-//implement the CORS config
-
-//products array
 let products = [
-    { id: 1, name: 'Product 1', description: 'description 1', price: 100, imageUrl: '' },
-    { id: 2, name: 'Product 2', description: 'description 2', price: 200, imageUrl: '' },
-    { id: 3, name: 'Product 3', description: 'description 3', price: 300, imageUrl: '' },
-    { id: 4, name: 'Product 4', description: 'description 4', price: 150, imageUrl: '' },
-    { id: 5, name: 'Product 5', description: 'description 5', price: 500, imageUrl: '' },
-    { id: 6, name: 'Product 6', description: 'description 6', price: 50, imageUrl: '' },
+  { id: 1, name: 'Product 1', description: 'description 1', price: 100 },
+  { id: 2, name: 'Product 2', description: 'description 2', price: 200 },
+  { id: 3, name: 'Product 3', description: 'description 3', price: 300 },
+  { id: 4, name: 'Product 4', description: 'description 4', price: 150 },
+  { id: 5, name: 'Product 5', description: 'description 5', price: 500 },
+  { id: 6, name: 'Product 6', description: 'description 6', price: 50 },
 ];
 
-//function to generate a url for getting a random image from picsum
 const fetchImageUrl = () => {
-    return `https://picsum.photos/200/200?random=${Math.floor(Math.random() * 1000)}`;
+  return `https://picsum.photos/200/200?random=${Math.floor(Math.random() * 1000)}`;
 };
 
-//implement the get api for getting products
 app.get('/api/products', (req, res) => {
-
+  const withImages = products.map(p => ({
+    ...p,
+    imageUrl: fetchImageUrl()
+  }));
+  res.json(withImages);
 });
 
-//implement the delete api for deleting a product by Id
 app.delete('/api/products/:id', (req, res) => {
-    
+  const id = parseInt(req.params.id);
+  const initialLength = products.length;
+  products = products.filter(p => p.id !== id);
+  if (products.length < initialLength) {
+    res.status(204).send();
+  } else {
+    res.status(404).json({ error: 'Product not found' });
+  }
 });
 
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+  console.log(`server link: http://localhost:${PORT}`);
 });
