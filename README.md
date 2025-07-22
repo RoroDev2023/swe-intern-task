@@ -10,3 +10,16 @@ THIS IS TO TEST YOUR SKILLS TO MEET OUR APP DEVELOPMENT REQUIREMENTS
 HAPPY CODING! </br>
 A Round Entertainment
 # swe-intern-task
+
+## How to run frontend:
+1. `cd StarterCode`
+2. `cd frontend`
+3. `npm install`
+4. `npm start`
+
+## How to run backend: 
+1. `cd StartedCode`
+2. `cd backend`
+3. `npm install`
+4. `node index.js`
+
